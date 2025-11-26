@@ -1,48 +1,75 @@
 @extends('layouts.app')
 
 @section('content')
-<h2>Editar Habitación</h2>
+<div class="container mt-4 text-white">
 
-<div class="card p-4">
-    <form action="{{ route('habitaciones.update', $habitacion) }}" method="POST">
-        @csrf @method('PUT')
+    <h2 class="fw-bold mb-3">Editar Reservación #{{ $res->id }}</h2>
+    
+    @if ($errors->any())
+    <div class="alert alert-danger">
+        <ul class="mb-0">
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
 
-        <div class="mb-3">
-            <label>Número</label>
-            <input type="text" class="form-control" name="numero" value="{{ $habitacion->numero }}" required>
-        </div>
-
-        <div class="mb-3">
-            <label>Tipo</label>
-            <input type="text" class="form-control" name="tipo" value="{{ $habitacion->tipo }}" required>
-        </div>
-
-        <div class="mb-3">
-            <label>Descripción</label>
-            <textarea class="form-control" name="descripcion">{{ $habitacion->descripcion }}</textarea>
-        </div>
+    <form action="{{ route('reservaciones.update', $res->id) }}" method="POST">
+        @csrf
+        @method('PUT')
 
         <div class="mb-3">
-            <label>Precio</label>
-            <input type="number" step="0.01" class="form-control" name="precio" value="{{ $habitacion->precio }}" required>
-        </div>
-
-        <div class="mb-3">
-            <label>Capacidad</label>
-            <input type="number" class="form-control" name="capacidad" value="{{ $habitacion->capacidad }}" required>
-        </div>
-
-        <div class="mb-3">
-            <label>Estado</label>
-            <select name="estado" class="form-control" required>
-                <option value="disponible" {{ $habitacion->estado=='disponible'?'selected':'' }}>Disponible</option>
-                <option value="ocupada" {{ $habitacion->estado=='ocupada'?'selected':'' }}>Ocupada</option>
-                <option value="mantenimiento" {{ $habitacion->estado=='mantenimiento'?'selected':'' }}>Mantenimiento</option>
+            <label class="form-label">Habitación</label>
+            <select name="habitacion_id" class="form-select" required>
+                @foreach ($habitaciones as $hab)
+                    <option value="{{ $hab->id }}" 
+                        {{ $hab->id == $res->habitacion_id ? 'selected' : '' }}>
+                        {{ $hab->numero }} - {{ $hab->tipo }} (${{ $hab->precio_noche }}/noche)
+                    </option>
+                @endforeach
             </select>
         </div>
 
-        <button class="btn btn-success">Actualizar</button>
-        <a href="{{ route('habitaciones.index') }}" class="btn btn-secondary">Volver</a>
+        <div class="row">
+            <div class="col mb-3">
+                <label class="form-label">Fecha Inicio</label>
+                <input type="date" name="fecha_inicio" value="{{ $res->fecha_inicio }}" class="form-control" required>
+            </div>
+
+            <div class="col mb-3">
+                <label class="form-label">Fecha Fin</label>
+                <input type="date" name="fecha_fin" value="{{ $res->fecha_fin }}" class="form-control" required>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col mb-3">
+                <label class="form-label">Adultos</label>
+                <input type="number" name="adultos" class="form-control" min="1" value="{{ $res->adultos }}" required>
+            </div>
+
+            <div class="col mb-3">
+                <label class="form-label">Niños</label>
+                <input type="number" name="ninos" class="form-control" min="0" value="{{ $res->ninos }}">
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Estado</label>
+            <select name="estado" class="form-select">
+                @foreach (['pendiente','confirmada','cancelada','finalizada'] as $estado)
+                    <option value="{{ $estado }}" {{ $res->estado == $estado ? 'selected' : '' }}>
+                        {{ ucfirst($estado) }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+
+        <button class="btn btn-primary">Actualizar</button>
+        <a href="{{ route('reservaciones.index') }}" class="btn btn-secondary">Cancelar</a>
+
     </form>
+
 </div>
 @endsection

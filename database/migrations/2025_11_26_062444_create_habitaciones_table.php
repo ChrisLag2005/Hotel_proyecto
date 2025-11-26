@@ -16,7 +16,7 @@ return new class extends Migration
         $table->string('numero')->unique();
         $table->string('tipo');
         $table->text('descripcion')->nullable();
-        $table->decimal('precio_noche', 8, 2);
+        $table->decimal('precio', 8, 2);
         $table->integer('capacidad');
         $table->enum('estado', ['disponible', 'ocupada', 'mantenimiento'])->default('disponible');
         $table->string('imagen')->nullable(); 
