@@ -59,7 +59,6 @@ public function register(Request $request)
 
     if (Auth::attempt($credentials)) {
 
-        dd('ROL DEL USUARIO:', Auth::user()->role);
 
         $request->session()->regenerate();
         return redirect()->route('welcome.hotel');
