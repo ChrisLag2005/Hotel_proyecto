@@ -6,9 +6,9 @@ use App\Http\Controllers\HabitacionController;
 use App\Http\Controllers\ReservacionController;
 
 // Página principal al iniciar sesión
-Route::get('/', function () {
-    return redirect()->route('reservaciones.index');
-})->middleware('auth');
+Route::get('/bienvenido', function () {
+    return view('welcome-hotel');
+})->name('welcome.hotel')->middleware('auth');
 
 // Registro
 Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
@@ -21,17 +21,17 @@ Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 // Logout
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-// Ruta para probar autenticación
-Route::get('/dashboard', function () {
-    return "Bienvenido, estás logueado!";
-})->middleware('auth');
-
 // Rutas protegidas
 Route::middleware(['auth'])->group(function () {
 
-    // CRUD Habitaciones
-    Route::resource('habitaciones', HabitacionController::class);
+    // SOLO ADMINISTRADORES
+    Route::middleware(['role:administrador'])->group(function () {
+        Route::resource('habitaciones', HabitacionController::class);
+    });
 
-    // CRUD Reservaciones
-    Route::resource('reservaciones', ReservacionController::class);
+    // SOLO CLIENTES
+    Route::middleware(['role:cliente'])->group(function () {
+        Route::resource('reservaciones', ReservacionController::class);
+    });
+
 });

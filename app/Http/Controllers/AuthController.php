@@ -16,22 +16,32 @@ class AuthController extends Controller
     }
 
     // Registrar usuario
-    public function register(Request $request)
-    {
-        $request->validate([
-            'name' => 'required',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|min:4',
-        ]);
+public function register(Request $request)
+{
+    $request->validate([
+        'name' => 'required',
+        'email' => 'required|email|unique:users',
+       'password' => 'required|min:4|confirmed',
+        'role' => 'required|in:cliente,administrador',
+        'clave_admin' => 'nullable'
+    ]);
 
-        User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password), // IMPORTANTE
-        ]);
-
-        return redirect()->route('login')->with('success', 'Cuenta creada. Inicia sesión.');
+    if ($request->role === "administrador") {
+        if ($request->clave_admin !== "HOTEL-ADMIN-999") {
+            return back()->withErrors(['clave_admin' => 'Clave de administrador incorrecta.'])->withInput();
+        }
     }
+
+    User::create([
+        'name'     => $request->name,
+        'email'    => $request->email,
+        'password' => Hash::make($request->password),
+        'role'     => $request->role,
+    ]);
+
+    return redirect()->route('login')->with('success', 'Cuenta creada. Inicia sesión.');
+}
+
 
     // Mostrar formulario de login
     public function showLogin()
@@ -40,22 +50,26 @@ class AuthController extends Controller
     }
 
     // Login
-    public function login(Request $request)
-    {
-        $credentials = $request->validate([
-            'email' => 'required',
-            'password' => 'required',
-        ]);
+ public function login(Request $request)
+{
+    $credentials = $request->validate([
+        'email' => 'required',
+        'password' => 'required',
+    ]);
 
-        if (Auth::attempt($credentials)) {
-            $request->session()->regenerate();
-            return redirect()->intended('/dashboard');
-        }
+    if (Auth::attempt($credentials)) {
 
-        return back()->withErrors([
-            'email' => 'Credenciales incorrectas.',
-        ]);
+        dd('ROL DEL USUARIO:', Auth::user()->role);
+
+        $request->session()->regenerate();
+        return redirect()->route('welcome.hotel');
     }
+
+    return back()->withErrors([
+        'email' => 'Credenciales incorrectas.',
+    ]);
+}
+
 
     // Logout
     public function logout(Request $request)

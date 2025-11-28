@@ -54,6 +54,27 @@
             <input type="password" name="password_confirmation" class="form-control" required>
         </div>
 
+        <div class="mb-3">
+    <label for="role">Tipo de usuario</label>
+    <select name="role" id="role" class="form-control" required onchange="toggleClave()">
+        <option value="cliente">Cliente</option>
+        <option value="administrador">Administrador</option>
+    </select>
+</div>
+
+<div class="mb-3" id="clave-admin-box" style="display:none;">
+    <label for="clave_admin">Clave de administrador</label>
+    <input type="password" name="clave_admin" id="clave_admin" class="form-control">
+</div>
+
+<script>
+function toggleClave() {
+    const rol = document.getElementById('role').value;
+    const box = document.getElementById('clave-admin-box');
+    box.style.display = (rol === "administrador") ? "block" : "none";
+}
+</script>
+
         <button class="btn btn-success w-100">Registrarse</button>
 
         <div class="text-center mt-3">
