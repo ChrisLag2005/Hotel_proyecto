@@ -33,5 +33,5 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['role:cliente'])->group(function () {
         Route::resource('reservaciones', ReservacionController::class);
     });
-
+//hola q hace
 });
