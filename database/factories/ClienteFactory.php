@@ -4,9 +4,12 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
+use App\Models\Cliente;
 
-class UsuarioFactory extends Factory
+class ClienteFactory extends Factory
 {
+    protected $model = Cliente::class;
+
     public function definition()
     {
         return [

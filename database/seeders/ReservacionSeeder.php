@@ -1,0 +1,32 @@
+<?php
+
+namespace Database\Seeders;
+
+use App\Models\Cliente;
+use App\Models\Habitacion;
+use App\Models\Reservacion;
+use Illuminate\Database\Seeder;
+
+class ReservacionSeeder extends Seeder
+{
+    public function run()
+    {
+        // Crear 20 reservaciones de prueba
+        Reservacion::factory()->count(20)->create();
+        
+        // Opcional: crear reservaciones específicas
+        $cliente = Cliente::first();
+        $habitacion = Habitacion::where('estado', 'disponible')->first();
+        
+        if ($cliente && $habitacion) {
+            Reservacion::factory()->create([
+                'cliente_id' => $cliente->id,
+                'habitacion_id' => $habitacion->id,
+                'fecha_inicio' => now()->addDays(5),
+'fecha_fin' => now()->addDays(10),
+                'estado' => 'confirmada',
+                'total' => 900.00,
+            ]);
+        }
+    }
+}

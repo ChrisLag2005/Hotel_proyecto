@@ -10,7 +10,7 @@ use App\Models\Cliente;
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Usuario>
  */
-class UsuarioFactory extends Factory
+class UserFactory extends Factory
 {
     protected $model = Cliente::class;
     protected static ?string $password;
@@ -22,13 +22,15 @@ class UsuarioFactory extends Factory
      */
     public function definition(): array
     {
-        return [
-            'name' => fake()->name(),
-            'email' => fake()->unique()->safeEmail(),
-            'email_verified_at' => now(),
-            'password' => static::$password ??= Hash::make('password'),
-            'remember_token' => Str::random(10),
-        ];
+       return [
+    'nombre' => fake()->firstName(),
+    'apellido' => fake()->lastName(),
+    'email' => fake()->unique()->safeEmail(),
+    'password' => static::$password ??= Hash::make('password'),
+    'telefono' => fake()->phoneNumber(),
+    'direccion' => fake()->address(),
+    'tipo' => 'cliente',
+];
     }
 
     /**

@@ -10,21 +10,14 @@ return new class extends Migration
     {
         Schema::create('reservaciones', function (Blueprint $table) {
             $table->id();
-
-            // Relación con usuarios (clientes)
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-
-            // Relación con habitaciones
+           $table->foreignId('cliente_id')->constrained('clientes')->onDelete('cascade');
             $table->foreignId('habitacion_id')->constrained('habitaciones')->onDelete('cascade');
-
-            // Datos de reserva
             $table->date('fecha_inicio');
             $table->date('fecha_fin');
             $table->integer('adultos');
-            $table->integer('ninos')->default(0); // Evitar acentos en nombres de columnas
+            $table->integer('ninos')->default(0);
             $table->enum('estado', ['pendiente', 'confirmada', 'cancelada', 'finalizada'])->default('pendiente');
             $table->decimal('total', 8, 2)->nullable();
-
             $table->timestamps();
         });
     }

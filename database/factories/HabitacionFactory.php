@@ -11,11 +11,12 @@ class HabitacionFactory extends Factory
         return [
             'numero' => $this->faker->unique()->numberBetween(100, 999),
             'tipo' => $this->faker->randomElement(['individual', 'doble', 'suite', 'familiar']),
-            'precio_por_noche' => $this->faker->randomFloat(2, 50, 500),
-            'estado' => $this->faker->randomElement(['disponible', 'ocupada', 'mantenimiento', 'limpieza']),
+            'precio' => $this->faker->randomFloat(2, 50, 500),
+            'estado' => $this->faker->randomElement(['disponible', 'ocupada', 'mantenimiento' ]),
             'capacidad' => $this->faker->numberBetween(1, 6),
             'descripcion' => $this->faker->sentence(10),
-            'piso' => $this->faker->numberBetween(1, 10),
+            
+            'imagen' => $this->faker->optional()->imageUrl(),
         ];
     }
 }
