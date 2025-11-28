@@ -20,6 +20,10 @@ class Reservacion extends Model
         'estado',
         'total',
     ];
+    public function cliente()
+{
+    return $this->belongsTo(Cliente::class);
+}
 
     public function usuario()
     {

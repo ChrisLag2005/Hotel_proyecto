@@ -20,6 +20,14 @@ class Habitacion extends Model
         'estado',
     ];
 
+    public function servicios()
+    {
+        return $this->belongsToMany(Servicio::class, 'habitacion_servicio')
+                    ->withPivot('precio_extra', 'incluido')
+                    ->withTimestamps();
+    }
+
+
     public function reservaciones()
     {
         return $this->hasMany(Reservacion::class);
