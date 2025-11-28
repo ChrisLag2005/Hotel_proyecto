@@ -8,6 +8,17 @@
     <div class="container mt-4">
         <h1>Habitaciones y Servicios</h1>
         
+        {{-- 👇 CONTROL DE ACCESO PARA ADMIN --}}
+        @if(auth()->user()->role !== 'admin')
+            <div class="alert alert-danger text-center">
+                <h4>Acceso Denegado</h4>
+                <p>No tienes permisos de administrador para acceder a esta sección.</p>
+                <a href="/bienvenido" class="btn btn-primary">Volver al Inicio</a>
+            </div>
+            @php return; @endphp
+        @endif
+
+        {{-- 👇 CONTENIDO SOLO PARA ADMIN --}}
         <div class="row">
             @foreach($habitaciones as $habitacion)
             <div class="col-md-6 mb-3">
@@ -30,7 +41,7 @@
                                 @endforeach
                             </ul>
                         </p>
-                        <a href="{{ route('habitaciones.servicios.edit', $habitacion) }}" class="btn btn-primary">
+                        <a href="/habitaciones/{{ $habitacion->id }}/servicios" class="btn btn-primary">
                             Gestionar Servicios
                         </a>
                     </div>

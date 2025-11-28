@@ -6,37 +6,31 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HabitacionController;
 use App\Http\Controllers\ReservacionController;
 
-// Página principal al iniciar sesión
+Route::get('/', function () {
+    return view('welcome');
+})->name('home');
+
+Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
+Route::post('/register', [AuthController::class, 'register'])->name('register.post');
+Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
+Route::post('/login', [AuthController::class, 'login'])->name('login.post');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
 Route::get('/bienvenido', function () {
     return view('welcome-hotel');
 })->name('welcome.hotel')->middleware('auth');
 
-// Registro
-Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
-Route::post('/register', [AuthController::class, 'register'])->name('register.post');
-
-// Login
-Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
-Route::post('/login', [AuthController::class, 'login'])->name('login.post');
-
-// Logout
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-
-// Rutas protegidas
 Route::middleware(['auth'])->group(function () {
+  
 
-  Route::middleware(['auth', 'role:administrador'])->group(function () {
     Route::resource('habitaciones', HabitacionController::class);
-});
+    
 
-Route::middleware(['auth', 'role:cliente'])->group(function () {
-    Route::resource('reservaciones', ReservacionController::class);
-});
+    Route::resource('reservaciones', ReservacionController::class)->parameters([
+        'reservaciones' => 'reservacion'
+    ]);
 
-Route::get('/habitaciones-servicios', [HabitacionServicioController::class, 'index'])->name('habitaciones-servicios.index');
-Route::get('/habitaciones/{habitacion}/servicios', [HabitacionServicioController::class, 'edit'])->name('habitaciones.servicios.edit');
-Route::post('/habitaciones/{habitacion}/servicios', [HabitacionServicioController::class, 'update'])->name('habitaciones.servicios.update');
-
-
-
+    Route::get('/habitaciones-servicios', [HabitacionServicioController::class, 'index']);
+    Route::get('/habitaciones/{habitacion}/servicios', [HabitacionServicioController::class, 'edit']);
+    Route::post('/habitaciones/{habitacion}/servicios', [HabitacionServicioController::class, 'update']);
 });

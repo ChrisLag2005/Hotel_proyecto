@@ -3,7 +3,7 @@
 @section('content')
 <div class="d-flex justify-content-between mb-3">
     <h2>Habitaciones</h2>
-    <a href="{{ route('habitaciones.create') }}" class="btn btn-primary">Nueva habitación</a>
+    <a href="{{ url('/habitaciones/create') }}" class="btn btn-primary">Nueva habitación</a>
 </div>
 
 <div class="card p-3">
@@ -19,27 +19,28 @@
                 <th>Acciones</th>
             </tr>
         </thead>
-
         <tbody>
-            @foreach ($habitaciones as $h)
-            <tr>
-                <td>{{ $h->id }}</td>
-                <td>{{ $h->numero }}</td>
-                <td>{{ $h->tipo }}</td>
-                <td>${{ $h->precio }}</td>
-                <td>{{ $h->capacidad }}</td>
-                <td>{{ $h->estado }}</td>
-
-                <td>
-                    <a href="{{ route('habitaciones.edit', $h) }}" class="btn btn-warning btn-sm">Editar</a>
-
-                    <form action="{{ route('habitaciones.destroy', $h) }}" 
-                        method="POST" class="d-inline">
-                        @csrf @method('DELETE')
-                        <button class="btn btn-danger btn-sm">Eliminar</button>
-                    </form>
-                </td>
-            </tr>
+            @foreach ($habitaciones as $habitacion)
+                <tr>
+                    <td>{{ $habitacion->id }}</td>
+                    <td>{{ $habitacion->numero }}</td>
+                    <td>{{ $habitacion->tipo }}</td>
+                    <td>${{ $habitacion->precio }}</td>
+                    <td>{{ $habitacion->capacidad }}</td>
+                    <td>
+                        <span class="badge bg-{{ $habitacion->estado == 'disponible' ? 'success' : 'danger' }}">
+                            {{ ucfirst($habitacion->estado) }}
+                        </span>
+                    </td>
+                    <td>
+                        <a href="{{ url('/habitaciones/' . $habitacion->id . '/edit') }}" class="btn btn-sm btn-warning">Editar</a>
+                        <form action="{{ url('/habitaciones/' . $habitacion->id) }}" method="POST" class="d-inline">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Eliminar habitación?')">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
             @endforeach
         </tbody>
     </table>
