@@ -1,4 +1,5 @@
 <?php
+<?php
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
@@ -24,14 +25,12 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 // Rutas protegidas
 Route::middleware(['auth'])->group(function () {
 
-    // SOLO ADMINISTRADORES
-    Route::middleware(['role:administrador'])->group(function () {
-        Route::resource('habitaciones', HabitacionController::class);
-    });
+  Route::middleware(['auth', 'role:administrador'])->group(function () {
+    Route::resource('habitaciones', HabitacionController::class);
+});
 
-    // SOLO CLIENTES
-    Route::middleware(['role:cliente'])->group(function () {
-        Route::resource('reservaciones', ReservacionController::class);
-    });
-//hola q hace
+Route::middleware(['auth', 'role:cliente'])->group(function () {
+    Route::resource('reservaciones', ReservacionController::class);
+});
+
 });
