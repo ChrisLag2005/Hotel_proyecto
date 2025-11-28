@@ -1,6 +1,6 @@
 <?php
 
-
+use App\Http\Controllers\HabitacionServicioController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HabitacionController;
@@ -32,5 +32,11 @@ Route::middleware(['auth'])->group(function () {
 Route::middleware(['auth', 'role:cliente'])->group(function () {
     Route::resource('reservaciones', ReservacionController::class);
 });
+
+Route::get('/habitaciones-servicios', [HabitacionServicioController::class, 'index'])->name('habitaciones-servicios.index');
+Route::get('/habitaciones/{habitacion}/servicios', [HabitacionServicioController::class, 'edit'])->name('habitaciones.servicios.edit');
+Route::post('/habitaciones/{habitacion}/servicios', [HabitacionServicioController::class, 'update'])->name('habitaciones.servicios.update');
+
+
 
 });

@@ -19,21 +19,32 @@ class HabitacionController extends Controller
     }
 
     public function store(Request $request)
-    {
-        $request->validate([
-            'numero' => 'required|unique:habitaciones',
-            'tipo' => 'required',
-            'descripcion' => 'nullable',
-            'precio' => 'required|numeric',
-            'capacidad' => 'required|integer',
-            'estado' => 'required'
-        ]);
-
-        Habitacion::create($request->all());
-
-        return redirect()->route('habitaciones.index')
-                        ->with('success', 'Habitación creada correctamente.');
-    }
+{
+    
+    $request->validate([
+        'tipo' => 'required|string|max:255',
+        'descripcion' => 'nullable|string',
+        'precio' => 'required|numeric|min:0',
+        'capacidad' => 'required|integer|min:1'
+    ]);
+    
+    
+    $ultimoNumero = \App\Models\Habitacion::max('numero') ?? 0;
+    $nuevoNumero = $ultimoNumero + 1;
+    
+    
+    $habitacion = \App\Models\Habitacion::create([
+        'numero' => $nuevoNumero, 
+        'tipo' => $request->tipo,
+        'descripcion' => $request->descripcion,
+        'precio' => $request->precio,
+        'capacidad' => $request->capacidad,
+        'estado' => 'disponible' 
+    ]);
+    
+    return redirect()->route('habitaciones.index')
+                     ->with('success', "Habitación {$nuevoNumero} creada correctamente");
+}
 
     public function edit(Habitacion $habitacione)
     {
