@@ -32,7 +32,6 @@ class HabitacionController extends Controller
 
         $data = $request->all();
         
-
         if ($request->hasFile('imagen')) {
             $imagenPath = $request->file('imagen')->store('habitaciones', 'public');
             $data['imagen'] = $imagenPath;
@@ -68,7 +67,6 @@ class HabitacionController extends Controller
 
         $data = $request->all();
         
-
         if ($request->hasFile('imagen')) {
             if ($habitacion->imagen && Storage::disk('public')->exists($habitacion->imagen)) {
                 Storage::disk('public')->delete($habitacion->imagen);

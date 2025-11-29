@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container mt-4">
-    <h2 class="fw-bold mb-4 text-white">Lista de Reservaciones</h2>
+    <h2 class="fw-bold mb-4">Lista de Reservaciones</h2>
 
     @if(session('success'))
         <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -73,26 +73,28 @@
                                 <td class="fw-bold">${{ number_format($reservacion->total, 2) }}</td>
                                 <td>
                                     <div class="d-flex gap-2 justify-content-center">
-                                        <!-- Botón Editar -->
-                                        <a href="{{ route('reservaciones.edit', $reservacion->id) }}" 
-                                           class="btn btn-warning btn-sm" 
-                                           title="Editar reservación">
-                                            <i class="fas fa-edit"></i> Editar
-                                        </a>
+                                        <!-- Botón Editar - CORREGIDO -->
+                                        @if($reservacion->user_id == auth()->id())
+                                            <a href="{{ route('reservaciones.edit', $reservacion) }}" 
+                                               class="btn btn-warning btn-sm" 
+                                               title="Editar reservación">
+                                                <i class="fas fa-edit"></i> Editar
+                                            </a>
                                         
-                                        <!-- Botón Eliminar -->
-                                        <form action="{{ route('reservaciones.destroy', $reservacion->id) }}" 
-                                              method="POST" 
-                                              class="d-inline">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" 
-                                                    class="btn btn-danger btn-sm" 
-                                                    title="Eliminar reservación"
-                                                    onclick="return confirm('¿Estás seguro de eliminar esta reservación?')">
-                                                <i class="fas fa-trash"></i> Eliminar
-                                            </button>
-                                        </form>
+                                            <!-- Botón Eliminar - CORREGIDO -->
+                                            <form action="{{ route('reservaciones.destroy', $reservacion) }}" 
+                                                  method="POST" 
+                                                  class="d-inline">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" 
+                                                        class="btn btn-danger btn-sm" 
+                                                        title="Eliminar reservación"
+                                                        onclick="return confirm('¿Estás seguro de eliminar esta reservación?')">
+                                                    <i class="fas fa-trash"></i> Eliminar
+                                                </button>
+                                            </form>
+                                        @endif
                                     </div>
                                 </td>
                             </tr>

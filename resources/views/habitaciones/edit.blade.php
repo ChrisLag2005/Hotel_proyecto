@@ -2,7 +2,13 @@
 
 @section('content')
 <div class="container mt-4">
-    <h2 class="fw-bold mb-4">Editar Habitación #{{ $habitacion->numero }}</h2>
+    
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold mb-0">Editar Habitación #{{ $habitacion->numero }}</h2>
+        <a href="{{ route('habitaciones.index') }}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Volver a Habitaciones
+        </a>
+    </div>
 
     @if ($errors->any())
         <div class="alert alert-danger">
@@ -44,9 +50,9 @@
 
             <div class="col-md-6">
                 <div class="mb-3">
-    <label class="form-label">Precio por Noche *</label>
-    <input type="number" name="precio" class="form-control" step="0.01" min="0" value="{{ old('precio', $habitacion->precio) }}" required>
-</div>
+                    <label class="form-label">Precio por Noche *</label>
+                    <input type="number" name="precio" class="form-control" step="0.01" min="0" value="{{ old('precio', $habitacion->precio) }}" required>
+                </div>
 
                 <div class="mb-3">
                     <label class="form-label">Estado *</label>
@@ -57,7 +63,7 @@
                     </select>
                 </div>
 
-                <!-- CAMPO NUEVO: IMAGEN -->
+               
                 <div class="mb-3">
                     <label class="form-label">Imagen de la Habitación</label>
                     <input type="file" name="imagen" class="form-control" accept="image/*">

@@ -5,15 +5,23 @@ namespace App\Http\Controllers;
 use App\Models\Reservacion;
 use App\Models\Habitacion;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class ReservacionController extends Controller
 {
-    public function index()
-    {
-        $reservaciones = Reservacion::with(['habitacion', 'usuario'])->get();
-        return view('reservaciones.index', compact('reservaciones'));
+   public function index()
+{
+    
+    if (auth()->user()->es_admin) {
+        $reservaciones = Reservacion::with(['habitacion'])->get();
+    } else {
+       
+        $reservaciones = Reservacion::with(['habitacion'])
+                                   ->where('cliente_id', auth()->id())
+                                   ->get();
     }
+    
+    return view('reservaciones.index', compact('reservaciones'));
+}
 
     public function create()
     {
@@ -33,7 +41,6 @@ class ReservacionController extends Controller
 
         $habitacion = Habitacion::findOrFail($request->habitacion_id);
 
-        // Validar capacidad
         $totalPersonas = $request->adultos + $request->ninos;
         if ($totalPersonas > $habitacion->capacidad) {
             return redirect()->back()->withErrors([
@@ -41,7 +48,6 @@ class ReservacionController extends Controller
             ])->withInput();
         }
 
-        // Validar fechas no empalmadas
         $traslape = Reservacion::where('habitacion_id', $request->habitacion_id)
             ->where(function($query) use ($request) {
                 $query->where('fecha_inicio', '<', $request->fecha_fin)
@@ -55,14 +61,13 @@ class ReservacionController extends Controller
             ])->withInput();
         }
 
-        // Calcular total
         $dias = (new \Carbon\Carbon($request->fecha_inicio))
                   ->diffInDays(new \Carbon\Carbon($request->fecha_fin));
 
         $total = $dias * $habitacion->precio;
 
         Reservacion::create([
-            'user_id' => auth()->id(),
+            'cliente_id' => auth()->id(),
             'habitacion_id' => $request->habitacion_id,
             'fecha_inicio' => $request->fecha_inicio,
             'fecha_fin' => $request->fecha_fin,
@@ -78,7 +83,6 @@ class ReservacionController extends Controller
     public function edit(Reservacion $reservacion)
     {
         $habitaciones = Habitacion::all();
-        
         return view('reservaciones.edit', compact('reservacion', 'habitaciones'));
     }
 
@@ -99,10 +103,9 @@ class ReservacionController extends Controller
                         ->with('success', 'Reservación actualizada.');
     }
 
-    public function destroy(Reservacion $reservacione)
+    public function destroy(Reservacion $reservacion)
     {
-        $reservacione->delete();
-
+        $reservacion->delete();
         return redirect()->route('reservaciones.index')
                         ->with('success', 'Reservación eliminada.');
     }

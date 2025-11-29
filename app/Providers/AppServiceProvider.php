@@ -2,23 +2,32 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
+use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Gate;
+use App\Models\Habitacion;
+use App\Models\Reservacion;
+use App\Policies\HabitacionPolicy;
+use App\Policies\ReservacionPolicy;
 
-class AppServiceProvider extends ServiceProvider
+class AuthServiceProvider extends ServiceProvider
 {
     /**
-     * Register any application services.
+     * The model to policy mappings for the application.
+     *
+     * @var array<class-string, class-string>
      */
-    public function register(): void
-    {
-        //
-    }
+    protected $policies = [
+        Habitacion::class => HabitacionPolicy::class,
+        Reservacion::class => ReservacionPolicy::class,
+    ];
 
     /**
-     * Bootstrap any application services.
+     * Register any authentication / authorization services.
      */
     public function boot(): void
     {
+        $this->registerPolicies();
+
         //
     }
 }

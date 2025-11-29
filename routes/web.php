@@ -22,13 +22,20 @@ Route::get('/bienvenido', function () {
 
 Route::middleware(['auth'])->group(function () {
   
-    Route::resource('habitaciones', HabitacionController::class)->parameters([
-        'habitaciones' => 'habitacion'
-    ]);
-    Route::resource('reservaciones', ReservacionController::class)->parameters([
-        'reservaciones' => 'reservacion'
-    ]);
-
+    Route::get('/habitaciones', [HabitacionController::class, 'index'])->name('habitaciones.index');
+    Route::get('/habitaciones-disponibles', [HabitacionController::class, 'index'])->name('habitaciones.disponibles');
+    Route::get('/habitaciones/create', [HabitacionController::class, 'create'])->name('habitaciones.create');
+    Route::post('/habitaciones', [HabitacionController::class, 'store'])->name('habitaciones.store');
+    Route::get('/habitaciones/{habitacion}/edit', [HabitacionController::class, 'edit'])->name('habitaciones.edit');
+    Route::put('/habitaciones/{habitacion}', [HabitacionController::class, 'update'])->name('habitaciones.update');
+    Route::delete('/habitaciones/{habitacion}', [HabitacionController::class, 'destroy'])->name('habitaciones.destroy');
+    
+    Route::get('/reservaciones', [ReservacionController::class, 'index'])->name('reservaciones.index');
+    Route::get('/reservaciones/create', [ReservacionController::class, 'create'])->name('reservaciones.create');
+    Route::post('/reservaciones', [ReservacionController::class, 'store'])->name('reservaciones.store');
+    Route::get('/reservaciones/{reservacion}/edit', [ReservacionController::class, 'edit'])->name('reservaciones.edit');
+    Route::put('/reservaciones/{reservacion}', [ReservacionController::class, 'update'])->name('reservaciones.update');
+    Route::delete('/reservaciones/{reservacion}', [ReservacionController::class, 'destroy'])->name('reservaciones.destroy');
 
     Route::get('/habitaciones-servicios', [HabitacionServicioController::class, 'index'])->name('habitaciones.servicios.index');
     Route::get('/habitaciones/{habitacion}/servicios', [HabitacionServicioController::class, 'edit'])->name('habitaciones.servicios.edit');

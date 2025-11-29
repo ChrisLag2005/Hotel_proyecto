@@ -11,10 +11,13 @@
         </div>
     @endif
 
+    <!-- BOTÓN SOLO PARA ADMIN - CORREGIDO -->
     <div class="mb-3">
-        <a href="{{ route('habitaciones.create') }}" class="btn btn-primary">
-            <i class="fas fa-plus"></i> Nueva Habitación
-        </a>
+        @if(auth()->user()->es_admin)
+            <a href="{{ route('habitaciones.create') }}" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Nueva Habitación
+            </a>
+        @endif
     </div>
 
     <div class="card">
@@ -63,24 +66,26 @@
                                 </td>
                                 <td>
                                     <div class="d-flex gap-2 justify-content-center">
-                                        <a href="{{ route('habitaciones.edit', $habitacion) }}" 
-                                           class="btn btn-warning btn-sm" 
-                                           title="Editar habitación">
-                                            <i class="fas fa-edit"></i> Editar
-                                        </a>
+                                        @if(auth()->user()->es_admin)
+                                            <a href="{{ route('habitaciones.edit', $habitacion) }}" 
+                                               class="btn btn-warning btn-sm" 
+                                               title="Editar habitación">
+                                                <i class="fas fa-edit"></i> Editar
+                                            </a>
                                         
-                                        <form action="{{ route('habitaciones.destroy', $habitacion) }}" 
-                                              method="POST" 
-                                              class="d-inline">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" 
-                                                    class="btn btn-danger btn-sm" 
-                                                    title="Eliminar habitación"
-                                                    onclick="return confirm('¿Estás seguro de eliminar esta habitación?')">
-                                                <i class="fas fa-trash"></i> Eliminar
-                                            </button>
-                                        </form>
+                                            <form action="{{ route('habitaciones.destroy', $habitacion) }}" 
+                                                  method="POST" 
+                                                  class="d-inline">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" 
+                                                        class="btn btn-danger btn-sm" 
+                                                        title="Eliminar habitación"
+                                                        onclick="return confirm('¿Estás seguro de eliminar esta habitación?')">
+                                                    <i class="fas fa-trash"></i> Eliminar
+                                                </button>
+                                            </form>
+                                        @endif
                                     </div>
                                 </td>
                             </tr>
