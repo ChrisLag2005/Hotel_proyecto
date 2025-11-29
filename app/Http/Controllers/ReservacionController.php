@@ -59,7 +59,7 @@ class ReservacionController extends Controller
         $dias = (new \Carbon\Carbon($request->fecha_inicio))
                   ->diffInDays(new \Carbon\Carbon($request->fecha_fin));
 
-        $total = $dias * $habitacion->precio_noche;
+        $total = $dias * $habitacion->precio;
 
         Reservacion::create([
             'user_id' => auth()->id(),

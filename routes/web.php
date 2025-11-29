@@ -22,14 +22,14 @@ Route::get('/bienvenido', function () {
 
 Route::middleware(['auth'])->group(function () {
   
-
-    Route::resource('habitaciones', HabitacionController::class);
-    
-
+    Route::resource('habitaciones', HabitacionController::class)->parameters([
+        'habitaciones' => 'habitacion'
+    ]);
     Route::resource('reservaciones', ReservacionController::class)->parameters([
         'reservaciones' => 'reservacion'
     ]);
 
+    // Rutas para HabitacionServicio
     Route::get('/habitaciones-servicios', [HabitacionServicioController::class, 'index']);
     Route::get('/habitaciones/{habitacion}/servicios', [HabitacionServicioController::class, 'edit']);
     Route::post('/habitaciones/{habitacion}/servicios', [HabitacionServicioController::class, 'update']);

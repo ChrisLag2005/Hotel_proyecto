@@ -1,48 +1,105 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="d-flex justify-content-between mb-3">
-    <h2>Habitaciones</h2>
-    <a href="{{ url('/habitaciones/create') }}" class="btn btn-primary">Nueva habitación</a>
+<div class="container mt-4">
+    <h2 class="fw-bold mb-4">Lista de Habitaciones</h2>
+
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
+    <div class="mb-3">
+        <a href="{{ route('habitaciones.create') }}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Nueva Habitación
+        </a>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>Imagen</th>
+                            <th>Número</th>
+                            <th>Tipo</th>
+                            <th>Capacidad</th>
+                            <th>Precio/Noche</th>
+                            <th>Estado</th>
+                            <th class="text-center">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($habitaciones as $habitacion)
+                            <tr>
+                                <td>
+                                    @if($habitacion->imagen)
+                                        <img src="{{ asset('storage/' . $habitacion->imagen) }}" 
+                                             alt="Imagen habitación {{ $habitacion->numero }}" 
+                                             class="img-thumbnail" 
+                                             style="max-height: 80px; max-width: 120px;">
+                                    @else
+                                        <span class="text-muted">Sin imagen</span>
+                                    @endif
+                                </td>
+                                <td class="fw-bold">{{ $habitacion->numero }}</td>
+                                <td>{{ ucfirst($habitacion->tipo) }}</td>
+                                <td class="text-center">{{ $habitacion->capacidad }} personas</td>
+                                <td>${{ number_format($habitacion->precio, 2) }}</td>
+                                <td>
+                                    @php
+                                        $badgeClass = [
+                                            'disponible' => 'bg-success',
+                                            'ocupada' => 'bg-warning text-dark',
+                                            'mantenimiento' => 'bg-danger'
+                                        ][$habitacion->estado] ?? 'bg-secondary';
+                                    @endphp
+                                    <span class="badge {{ $badgeClass }}">
+                                        {{ ucfirst($habitacion->estado) }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="d-flex gap-2 justify-content-center">
+                                        <a href="{{ route('habitaciones.edit', $habitacion) }}" 
+                                           class="btn btn-warning btn-sm" 
+                                           title="Editar habitación">
+                                            <i class="fas fa-edit"></i> Editar
+                                        </a>
+                                        
+                                        <form action="{{ route('habitaciones.destroy', $habitacion) }}" 
+                                              method="POST" 
+                                              class="d-inline">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" 
+                                                    class="btn btn-danger btn-sm" 
+                                                    title="Eliminar habitación"
+                                                    onclick="return confirm('¿Estás seguro de eliminar esta habitación?')">
+                                                <i class="fas fa-trash"></i> Eliminar
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
 
-<div class="card p-3">
-    <table class="table table-dark table-striped table-bordered">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Número</th>
-                <th>Tipo</th>
-                <th>Precio</th>
-                <th>Capacidad</th>
-                <th>Estado</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($habitaciones as $habitacion)
-                <tr>
-                    <td>{{ $habitacion->id }}</td>
-                    <td>{{ $habitacion->numero }}</td>
-                    <td>{{ $habitacion->tipo }}</td>
-                    <td>${{ $habitacion->precio }}</td>
-                    <td>{{ $habitacion->capacidad }}</td>
-                    <td>
-                        <span class="badge bg-{{ $habitacion->estado == 'disponible' ? 'success' : 'danger' }}">
-                            {{ ucfirst($habitacion->estado) }}
-                        </span>
-                    </td>
-                    <td>
-                        <a href="{{ url('/habitaciones/' . $habitacion->id . '/edit') }}" class="btn btn-sm btn-warning">Editar</a>
-                        <form action="{{ url('/habitaciones/' . $habitacion->id) }}" method="POST" class="d-inline">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Eliminar habitación?')">Eliminar</button>
-                        </form>
-                    </td>
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
-</div>
+<style>
+    .table th {
+        background-color: #343a40;
+        color: white;
+        border-bottom: 2px solid #dee2e6;
+    }
+    .img-thumbnail {
+        object-fit: cover;
+    }
+</style>
 @endsection

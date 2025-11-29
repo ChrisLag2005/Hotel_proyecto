@@ -24,7 +24,7 @@
                 <option value="">Seleccione</option>
                 @foreach ($habitaciones as $hab)
                     <option value="{{ $hab->id }}">
-                        {{ $hab->numero }} - {{ $hab->tipo }} (${{ $hab->precio_noche }}/noche)
+                        {{ $hab->numero }} - {{ $hab->tipo }} (${{ $hab->precio }}/noche)
                     </option>
                 @endforeach
             </select>

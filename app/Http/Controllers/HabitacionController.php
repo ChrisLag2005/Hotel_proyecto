@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Habitacion;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class HabitacionController extends Controller
 {
@@ -19,58 +20,83 @@ class HabitacionController extends Controller
     }
 
     public function store(Request $request)
-{
-    
-    $request->validate([
-        'tipo' => 'required|string|max:255',
-        'descripcion' => 'nullable|string',
-        'precio' => 'required|numeric|min:0',
-        'capacidad' => 'required|integer|min:1'
-    ]);
-    
-    
-    $ultimoNumero = \App\Models\Habitacion::max('numero') ?? 0;
-    $nuevoNumero = $ultimoNumero + 1;
-    
-    
-    $habitacion = \App\Models\Habitacion::create([
-        'numero' => $nuevoNumero, 
-        'tipo' => $request->tipo,
-        'descripcion' => $request->descripcion,
-        'precio' => $request->precio,
-        'capacidad' => $request->capacidad,
-        'estado' => 'disponible' 
-    ]);
-    
-    return redirect()->route('habitaciones.index')
-                     ->with('success', "Habitación {$nuevoNumero} creada correctamente");
-}
-
-    public function edit(Habitacion $habitacione)
-    {
-        return view('habitaciones.edit', ['habitacion' => $habitacione]);
-    }
-
-    public function update(Request $request, Habitacion $habitacione)
     {
         $request->validate([
-            'numero' => 'required',
+            'numero' => 'required|unique:habitaciones',
             'tipo' => 'required',
-            'precio' => 'required|numeric',
-            'capacidad' => 'required|integer',
-            'estado' => 'required'
+            'capacidad' => 'required|integer|min:1',
+            'precio' => 'required|numeric|min:0',
+            'estado' => 'required',
+            'imagen' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
 
-        $habitacione->update($request->all());
+        $data = $request->all();
+        
+
+        if ($request->hasFile('imagen')) {
+            $imagenPath = $request->file('imagen')->store('habitaciones', 'public');
+            $data['imagen'] = $imagenPath;
+            $data['imagen_original'] = $request->file('imagen')->getClientOriginalName();
+        }
+
+        Habitacion::create($data);
 
         return redirect()->route('habitaciones.index')
-                        ->with('success', 'Habitación actualizada correctamente.');
+                       ->with('success', 'Habitación creada exitosamente.');
     }
 
-    public function destroy(Habitacion $habitacione)
+    public function show(Habitacion $habitacion)
     {
-        $habitacione->delete();
+        return view('habitaciones.show', compact('habitacion'));
+    }
+
+    public function edit(Habitacion $habitacion)
+    {
+        return view('habitaciones.edit', compact('habitacion'));
+    }
+
+    public function update(Request $request, Habitacion $habitacion)
+    {
+        $request->validate([
+            'numero' => 'required|unique:habitaciones,numero,' . $habitacion->id,
+            'tipo' => 'required',
+            'capacidad' => 'required|integer|min:1',
+            'precio' => 'required|numeric|min:0',
+            'estado' => 'required',
+            'imagen' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048'
+        ]);
+
+        $data = $request->all();
+        
+
+        if ($request->hasFile('imagen')) {
+            if ($habitacion->imagen && Storage::disk('public')->exists($habitacion->imagen)) {
+                Storage::disk('public')->delete($habitacion->imagen);
+            }
+            
+            $imagenPath = $request->file('imagen')->store('habitaciones', 'public');
+            $data['imagen'] = $imagenPath;
+            $data['imagen_original'] = $request->file('imagen')->getClientOriginalName();
+        } else {
+            $data['imagen'] = $habitacion->imagen;
+            $data['imagen_original'] = $habitacion->imagen_original;
+        }
+
+        $habitacion->update($data);
+
         return redirect()->route('habitaciones.index')
-                        ->with('success', 'Habitación eliminada.');
+                       ->with('success', 'Habitación actualizada exitosamente.');
+    }
+
+    public function destroy(Habitacion $habitacion)
+    {
+        if ($habitacion->imagen && Storage::disk('public')->exists($habitacion->imagen)) {
+            Storage::disk('public')->delete($habitacion->imagen);
+        }
+
+        $habitacion->delete();
+
+        return redirect()->route('habitaciones.index')
+                       ->with('success', 'Habitación eliminada exitosamente.');
     }
 }
