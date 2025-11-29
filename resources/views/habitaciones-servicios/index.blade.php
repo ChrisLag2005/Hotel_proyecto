@@ -1,54 +1,61 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Gestión Habitaciones-Servicios</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
-    <div class="container mt-4">
-        <h1>Habitaciones y Servicios</h1>
-        
-        {{-- 👇 CONTROL DE ACCESO PARA ADMIN --}}
-        @if(auth()->user()->role !== 'admin')
-            <div class="alert alert-danger text-center">
-                <h4>Acceso Denegado</h4>
-                <p>No tienes permisos de administrador para acceder a esta sección.</p>
-                <a href="/bienvenido" class="btn btn-primary">Volver al Inicio</a>
-            </div>
-            @php return; @endphp
-        @endif
+@extends('layouts.app')
 
-        {{-- 👇 CONTENIDO SOLO PARA ADMIN --}}
-        <div class="row">
-            @foreach($habitaciones as $habitacion)
-            <div class="col-md-6 mb-3">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Habitación {{ $habitacion->numero }}</h5>
-                        <p class="card-text">
-                            <strong>Tipo:</strong> {{ $habitacion->tipo }}<br>
-                            <strong>Precio:</strong> ${{ $habitacion->precio }}<br>
-                            <strong>Servicios:</strong>
-                            <ul>
-                                @foreach($habitacion->servicios as $servicio)
-                                    <li>{{ $servicio->nombre }} 
-                                        @if($servicio->pivot->incluido)
-                                            <span class="badge bg-success">Incluido</span>
-                                        @else
-                                            <span class="badge bg-warning">+${{ $servicio->pivot->precio_extra }}</span>
-                                        @endif
-                                    </li>
-                                @endforeach
-                            </ul>
-                        </p>
-                        <a href="/habitaciones/{{ $habitacion->id }}/servicios" class="btn btn-primary">
-                            Gestionar Servicios
-                        </a>
-                    </div>
-                </div>
+@section('content')
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold mb-0">Gestión de Servicios por Habitación</h2>
+        <a href="{{ route('habitaciones.index') }}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Volver a Habitaciones
+        </a>
+    </div>
+
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>Habitación</th>
+                            <th>Tipo</th>
+                            <th>Servicios Asignados</th>
+                            <th class="text-center">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($habitaciones as $habitacion)
+                            <tr>
+                                <td class="fw-bold">{{ $habitacion->numero }}</td>
+                                <td>{{ ucfirst($habitacion->tipo) }}</td>
+                                <td>
+                                    @if($habitacion->servicios->count() > 0)
+                                        @foreach($habitacion->servicios as $servicio)
+                                            <span class="badge bg-primary me-1">
+                                                {{ $servicio->nombre }}
+                                            </span>
+                                        @endforeach
+                                    @else
+                                        <span class="text-muted">Sin servicios asignados</span>
+                                    @endif
+                                </td>
+                                <td class="text-center">
+                                    <a href="{{ route('habitaciones.servicios.edit', $habitacion) }}" 
+                                       class="btn btn-warning btn-sm">
+                                        <i class="fas fa-cog"></i> Gestionar Servicios
+                                    </a>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
-            @endforeach
         </div>
     </div>
-</body>
-</html>
+</div>
+@endsection

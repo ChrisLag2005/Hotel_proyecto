@@ -1,53 +1,58 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Editar Servicios - Habitación {{ $habitacion->numero }}</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
-    <div class="container mt-4">
-        <h1>Gestionar Servicios - Habitación {{ $habitacion->numero }}</h1>
-        
-        <form method="POST" action="{{ route('habitaciones.servicios.update', $habitacion) }}">
-            @csrf
-            @method('PUT')
-            
-            <div class="mb-3">
-                <h4>Seleccionar Servicios:</h4>
-                @foreach($servicios as $servicio)
-                <div class="form-check mb-2">
-                    <input class="form-check-input" type="checkbox" 
-                           name="servicios[]" 
-                           value="{{ $servicio->id }}"
-                           id="servicio{{ $servicio->id }}"
-                           {{ in_array($servicio->id, $serviciosHabitacion) ? 'checked' : '' }}>
-                    <label class="form-check-label" for="servicio{{ $servicio->id }}">
-                        <strong>{{ $servicio->nombre }}</strong> - ${{ $servicio->precio_adicional }}
-                    </label>
-                    
-                    <div class="ms-4">
-                        <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" 
-                                   name="incluido_{{ $servicio->id }}"
-                                   id="incluido{{ $servicio->id }}">
-                            <label class="form-check-label" for="incluido{{ $servicio->id }}">
-                                Incluido en el precio
-                            </label>
-                        </div>
-                        <div class="input-group input-group-sm mt-1" style="width: 200px;">
-                            <span class="input-group-text">Precio extra: $</span>
-                            <input type="number" class="form-control" 
-                                   name="precio_extra_{{ $servicio->id }}"
-                                   value="0" step="0.01" min="0">
-                        </div>
+@extends('layouts.app')
+
+@section('content')
+<div class="container mt-4">
+    <!-- BOTÓN DE REGRESO -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold mb-0">Gestionar Servicios - Habitación {{ $habitacion->numero }}</h2>
+        <a href="{{ route('habitaciones.servicios.index') }}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Volver a Servicios
+        </a>
+    </div>
+
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
+    <div class="card">
+        <div class="card-body">
+            <form action="{{ route('habitaciones.servicios.update', $habitacion) }}" method="POST">
+                @csrf
+                
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Seleccionar Servicios:</label>
+                    <div class="row">
+                        @foreach($servicios as $servicio)
+                            <div class="col-md-4 mb-2">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" 
+                                           name="servicios[]" 
+                                           value="{{ $servicio->id }}"
+                                           id="servicio{{ $servicio->id }}"
+                                           {{ in_array($servicio->id, $serviciosHabitacion ?? []) ? 'checked' : '' }}>
+                                    <label class="form-check-label" for="servicio{{ $servicio->id }}">
+                                        {{ $servicio->nombre }}
+                                        @if($servicio->precio_extra > 0)
+                                            <span class="text-success">(+${{ number_format($servicio->precio_extra, 2) }})</span>
+                                        @endif
+                                    </label>
+                                </div>
+                            </div>
+                        @endforeach
                     </div>
                 </div>
-                @endforeach
-            </div>
-            
-            <button type="submit" class="btn btn-success">Guardar Cambios</button>
-            <a href="{{ route('habitaciones-servicios.index') }}" class="btn btn-secondary">Cancelar</a>
-        </form>
+
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Guardar Servicios
+                    </button>
+                    <a href="{{ route('habitaciones.servicios.index') }}" class="btn btn-secondary">Cancelar</a>
+                </div>
+            </form>
+        </div>
     </div>
-</body>
-</html>
+</div>
+@endsection

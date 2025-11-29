@@ -16,12 +16,12 @@ class HabitacionServicioController extends Controller
         return view('habitaciones-servicios.index', compact('habitaciones'));
     }
     public function edit(Habitacion $habitacion)
-    {
-        $servicios = Servicio::all();
-        $serviciosHabitacion = $habitacion->servicios->pluck('id')->toArray();
-        
-        return view('habitaciones-servicios.edit', compact('habitacion', 'servicios', 'serviciosHabitacion'));
-    }
+{
+    $servicios = Servicio::all(); 
+    $serviciosHabitacion = $habitacion->servicios->pluck('id')->toArray();
+    
+    return view('habitaciones-servicios.edit', compact('habitacion', 'servicios', 'serviciosHabitacion'));
+}
 
 
     public function update(Request $request, Habitacion $habitacion)
@@ -44,7 +44,7 @@ class HabitacionServicioController extends Controller
 
         $habitacion->servicios()->sync($serviciosData);
 
-        return redirect()->route('habitaciones-servicios.index')
+        return redirect()->route('habitaciones.servicios.index')
                          ->with('success', 'Servicios actualizados correctamente');
     }
 }

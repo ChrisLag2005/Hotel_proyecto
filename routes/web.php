@@ -29,8 +29,8 @@ Route::middleware(['auth'])->group(function () {
         'reservaciones' => 'reservacion'
     ]);
 
-    // Rutas para HabitacionServicio
-    Route::get('/habitaciones-servicios', [HabitacionServicioController::class, 'index']);
-    Route::get('/habitaciones/{habitacion}/servicios', [HabitacionServicioController::class, 'edit']);
-    Route::post('/habitaciones/{habitacion}/servicios', [HabitacionServicioController::class, 'update']);
+
+    Route::get('/habitaciones-servicios', [HabitacionServicioController::class, 'index'])->name('habitaciones.servicios.index');
+    Route::get('/habitaciones/{habitacion}/servicios', [HabitacionServicioController::class, 'edit'])->name('habitaciones.servicios.edit');
+    Route::post('/habitaciones/{habitacion}/servicios', [HabitacionServicioController::class, 'update'])->name('habitaciones.servicios.update');
 });
