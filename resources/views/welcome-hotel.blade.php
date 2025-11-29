@@ -10,6 +10,19 @@
 
     <div class="row justify-content-center">
 
+        {{-- 🔹 BOTÓN PARA VER HABITACIONES (VISIBLE PARA TODOS LOS ROLES) --}}
+        <div class="col-md-6 mb-4">
+            <div class="card bg-dark text-light shadow-lg border-secondary">
+                <div class="card-body text-center">
+                    <h3>Habitaciones disponibles</h3>
+                    <p>Explora las habitaciones registradas y ve sus detalles.</p>
+                    <a href="{{ route('habitaciones.catalogo') }}" class="btn btn-info">
+                        Ver catálogo de habitaciones
+                    </a>
+                </div>
+            </div>
+        </div>
+
         {{-- TARJETA PARA CLIENTES --}}
         @if(auth()->user()->rol === 'cliente')
             <div class="col-md-6">

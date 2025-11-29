@@ -38,6 +38,7 @@
             <ul class="navbar-nav me-auto">
                 <li class="nav-item"><a class="nav-link" href="{{ route('habitaciones.index') }}">Habitaciones</a></li>
                 <li class="nav-item"><a class="nav-link" href="{{ route('reservaciones.index') }}">Reservaciones</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ route('habitaciones.catalogo') }}">Catálogo</a></li>
             </ul>
 
             <form method="POST" action="{{ route('logout') }}">

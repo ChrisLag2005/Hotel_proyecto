@@ -17,10 +17,17 @@ class Habitacion extends Model
         'precio',
         'capacidad',
         'estado',
+        'archivo'
     ];
 
     public function reservaciones()
     {
         return $this->hasMany(Reservacion::class);
     }
+
+    public function servicios()
+{
+    return $this->belongsToMany(\App\Models\Servicio::class, 'habitacion_servicio');
+}
+
 }

@@ -21,6 +21,12 @@ Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 // Logout
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+// Catálogo visible para clientes y empleados
+Route::get('/habitaciones-disponibles', [HabitacionController::class, 'catalogo'])->name('habitaciones.catalogo');
+
+// Ver detalle de una habitación
+Route::get('/habitaciones/{id}/ver', [HabitacionController::class, 'mostrar'])->name('habitaciones.mostrar');
+
 // Rutas protegidas
 Route::middleware(['auth'])->group(function () {
 

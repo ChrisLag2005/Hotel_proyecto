@@ -1,10 +1,10 @@
-@extends('layouts.app')
+@extends('layouts.app') 
 
 @section('content')
-<h2>Nueva Habitación</h2>
+<h2 class="text-white">Nueva Habitación</h2>
 
-<div class="card p-4">
-    <form action="{{ route('habitaciones.store') }}" method="POST">
+<div class="card p-4 bg-dark text-white">
+    <form action="{{ route('habitaciones.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
 
         <div class="mb-3">
@@ -36,9 +36,21 @@
             <label>Estado</label>
             <select name="estado" class="form-control" required>
                 <option value="disponible">Disponible</option>
-                <option value="ocupada">Ocupada</option>
                 <option value="mantenimiento">Mantenimiento</option>
             </select>
+        </div>
+<div class="mb-3">
+    <label>Servicios</label>
+    <select class="form-control" name="servicios[]" multiple>
+        @foreach($servicios as $serv)
+            <option value="{{ $serv->id }}">{{ $serv->nombre }}</option>
+        @endforeach
+    </select>
+</div>
+
+        <div class="mb-3">
+            <label class="form-label">Imagen / Archivo</label>
+            <input type="file" name="archivo" class="form-control" accept="image/*">
         </div>
 
         <button class="btn btn-success">Guardar</button>
