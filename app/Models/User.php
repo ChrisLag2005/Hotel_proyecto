@@ -54,4 +54,12 @@ class User extends Authenticatable
     {
         return $this->hasMany(Reservacion::class, 'user_id');
     }
+
+    /**
+     * Verificar si el usuario es administrador
+     */
+    public function getEsAdminAttribute()
+    {
+        return $this->role === 'admin';
+    }
 }

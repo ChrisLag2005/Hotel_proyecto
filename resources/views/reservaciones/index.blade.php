@@ -73,15 +73,17 @@
                                 <td class="fw-bold">${{ number_format($reservacion->total, 2) }}</td>
                                 <td>
                                     <div class="d-flex gap-2 justify-content-center">
-                                        <!-- Botón Editar - CORREGIDO -->
-                                        @if($reservacion->user_id == auth()->id())
+                                        <!-- Botón Editar - SOLO ADMIN -->
+                                        @if(auth()->user()->es_admin)
                                             <a href="{{ route('reservaciones.edit', $reservacion) }}" 
                                                class="btn btn-warning btn-sm" 
                                                title="Editar reservación">
                                                 <i class="fas fa-edit"></i> Editar
                                             </a>
-                                        
-                                            <!-- Botón Eliminar - CORREGIDO -->
+                                        @endif
+        
+                                        <!-- Botón Eliminar - SOLO ADMIN -->
+                                        @if(auth()->user()->es_admin)
                                             <form action="{{ route('reservaciones.destroy', $reservacion) }}" 
                                                   method="POST" 
                                                   class="d-inline">
