@@ -28,6 +28,7 @@
                         <li class="nav-item"><a class="nav-link" href="{{ url('/habitaciones') }}">Habitaciones</a></li>
                         <li class="nav-item"><a class="nav-link" href="{{ url('/habitaciones-servicios') }}">Servicios</a></li>
                         <li class="nav-item"><a class="nav-link" href="{{ url('/reservaciones') }}">Reservaciones</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('habitaciones.catalogo') }}">Catálogo</a></li>
                     @else
                         <li class="nav-item"><a class="nav-link" href="{{ url('/habitaciones-disponibles') }}">Habitaciones</a></li>
                         <li class="nav-item"><a class="nav-link" href="{{ url('/reservaciones') }}">Mis Reservas</a></li>

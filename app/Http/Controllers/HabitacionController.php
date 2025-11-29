@@ -86,6 +86,18 @@ class HabitacionController extends Controller
                        ->with('success', 'Habitación actualizada exitosamente.');
     }
 
+    public function catalogo()
+    {
+        $habitaciones = Habitacion::with('servicios')->get();
+        return view('habitaciones.catalogo', compact('habitaciones'));
+    }
+
+    public function mostrar($id)
+    {
+        $habitacion = Habitacion::with('servicios')->findOrFail($id);
+        return view('habitaciones.mostrar', compact('habitacion'));
+    }
+
     public function destroy(Habitacion $habitacion)
     {
         if ($habitacion->imagen && Storage::disk('public')->exists($habitacion->imagen)) {

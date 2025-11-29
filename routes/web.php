@@ -19,9 +19,11 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::get('/bienvenido', function () {
     return view('welcome-hotel');
 })->name('welcome.hotel')->middleware('auth');
-
+Route::get('/habitaciones-catalogo', [HabitacionController::class, 'catalogo'])->name('habitaciones.catalogo');
+Route::get('/habitaciones/{id}', [HabitacionController::class, 'mostrar'])
+    ->name('habitaciones.mostrar');
 Route::middleware(['auth'])->group(function () {
-  
+    
     Route::get('/habitaciones', [HabitacionController::class, 'index'])->name('habitaciones.index');
     Route::get('/habitaciones-disponibles', [HabitacionController::class, 'index'])->name('habitaciones.disponibles');
     Route::get('/habitaciones/create', [HabitacionController::class, 'create'])->name('habitaciones.create');

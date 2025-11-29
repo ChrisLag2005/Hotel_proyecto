@@ -14,7 +14,7 @@ class Habitacion extends Model
     
     protected $fillable = [
     'numero', 'tipo', 'capacidad', 'precio', 
-    'estado', 'imagen', 'imagen_original'
+    'estado', 'imagen', 'imagen_original', 
 ];
     
 
