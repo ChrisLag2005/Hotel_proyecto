@@ -38,6 +38,16 @@
             </div>
         @endif
 
+    @auth
+<div class="p-3 mb-3 rounded" style="background-color:#111; border:1px solid #333; max-width:350px;">
+    <h6 class="text-light mb-1">Rol del usuario</h6>
+    <span class="badge bg-primary text-uppercase">
+        {{ auth()->user()->role }}
+    </span>
+</div>
+@endauth
+
+
     </div>
 </div>
 @endsection

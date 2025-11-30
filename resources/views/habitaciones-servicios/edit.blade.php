@@ -5,7 +5,7 @@
     <!-- BOTÓN DE REGRESO -->
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="fw-bold mb-0">Gestionar Servicios - Habitación {{ $habitacion->numero }}</h2>
-        <a href="{{ route('habitaciones.servicios.index') }}" class="btn btn-secondary">
+        <a href="{{ route('habitaciones-servicios.index') }}" class="btn btn-secondary">
             <i class="fas fa-arrow-left"></i> Volver a Servicios
         </a>
     </div>
@@ -49,7 +49,7 @@
                     <button type="submit" class="btn btn-primary">
                         <i class="fas fa-save"></i> Guardar Servicios
                     </button>
-                    <a href="{{ route('habitaciones.servicios.index') }}" class="btn btn-secondary">Cancelar</a>
+                    <a href="{{ route('habitaciones-servicios.index') }}" class="btn btn-secondary">Cancelar</a>
                 </div>
             </form>
         </div>

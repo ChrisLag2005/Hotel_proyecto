@@ -8,10 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class Reservacion extends Model
 {
     use HasFactory;
-      protected $table = 'reservaciones';
+
+    protected $table = 'reservaciones';
 
     protected $fillable = [
-        'cliente_id',
+        'user_id',
         'habitacion_id',
         'fecha_inicio',
         'fecha_fin',
@@ -20,16 +21,14 @@ class Reservacion extends Model
         'estado',
         'total',
     ];
-    public function cliente()
-{
-    return $this->belongsTo(Cliente::class);
-}
 
+    // Relación con usuario (nuevo)
     public function usuario()
     {
         return $this->belongsTo(User::class, 'user_id');
     }
 
+    // Relación con habitación
     public function habitacion()
     {
         return $this->belongsTo(Habitacion::class);

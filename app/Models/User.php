@@ -34,6 +34,8 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    
+    protected $appends = ['es_admin'];
     /**
      * Get the attributes that should be cast.
      *
@@ -60,6 +62,11 @@ class User extends Authenticatable
      */
     public function getEsAdminAttribute()
     {
-        return $this->role === 'admin';
+        return $this->role === 'administrador';
     }
+
+    public function cliente()
+{
+    return $this->hasOne(Cliente::class);
+}
 }

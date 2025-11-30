@@ -8,20 +8,18 @@ use Illuminate\Http\Request;
 
 class ReservacionController extends Controller
 {
-   public function index()
-{
-    
-    if (auth()->user()->es_admin) {
-        $reservaciones = Reservacion::with(['habitacion'])->get();
-    } else {
-       
-        $reservaciones = Reservacion::with(['habitacion'])
-                                   ->where('cliente_id', auth()->id())
-                                   ->get();
+    public function index()
+    {
+        if (auth()->user()->es_admin) {
+            $reservaciones = Reservacion::with('habitacion')->get();
+        } else {
+            $reservaciones = Reservacion::with('habitacion')
+                                       ->where('user_id', auth()->id())
+                                       ->get();
+        }
+
+        return view('reservaciones.index', compact('reservaciones'));
     }
-    
-    return view('reservaciones.index', compact('reservaciones'));
-}
 
     public function create()
     {
@@ -66,8 +64,9 @@ class ReservacionController extends Controller
 
         $total = $dias * $habitacion->precio;
 
+        // Guardamos usando user_id
         Reservacion::create([
-            'cliente_id' => auth()->id(),
+            'user_id' => auth()->id(),
             'habitacion_id' => $request->habitacion_id,
             'fecha_inicio' => $request->fecha_inicio,
             'fecha_fin' => $request->fecha_fin,

@@ -30,4 +30,6 @@ class Habitacion extends Model
     {
         return $this->hasMany(Reservacion::class);
     }
+
+      protected $dates = ['deleted_at'];
 }

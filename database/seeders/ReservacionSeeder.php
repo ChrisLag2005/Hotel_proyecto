@@ -15,12 +15,12 @@ class ReservacionSeeder extends Seeder
         Reservacion::factory()->count(20)->create();
         
         // Opcional: crear reservaciones específicas
-        $cliente = Cliente::first();
+        $user = User::first();
         $habitacion = Habitacion::where('estado', 'disponible')->first();
         
-        if ($cliente && $habitacion) {
+        if ($user && $habitacion) {
             Reservacion::factory()->create([
-                'cliente_id' => $cliente->id,
+                'user_id' => $user->id,
                 'habitacion_id' => $habitacion->id,
                 'fecha_inicio' => now()->addDays(5),
 'fecha_fin' => now()->addDays(10),

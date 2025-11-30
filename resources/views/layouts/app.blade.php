@@ -15,7 +15,7 @@
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
     <div class="container">
-        <a class="navbar-brand" href="#">Hotel</a>
+        <a class="navbar-brand" href="{{ route('welcome.hotel') }}">Hotel</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" 
             data-bs-target="#menu" aria-controls="menu" aria-expanded="false">
             <span class="navbar-toggler-icon"></span>
@@ -25,21 +25,32 @@
             <ul class="navbar-nav me-auto">
                 @auth
                     @if(auth()->user()->role === 'admin')
-                        <li class="nav-item"><a class="nav-link" href="{{ url('/habitaciones') }}">Habitaciones</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ url('/habitaciones-servicios') }}">Servicios</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ url('/reservaciones') }}">Reservaciones</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ route('habitaciones.catalogo') }}">Catálogo</a></li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('habitaciones.index') }}">Habitaciones</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('reservaciones.index') }}">Reservaciones</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('habitaciones.catalogo') }}">Catálogo</a>
+                        </li>
                     @else
-                        <li class="nav-item"><a class="nav-link" href="{{ url('/habitaciones-disponibles') }}">Habitaciones</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ url('/reservaciones') }}">Mis Reservas</a></li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('habitaciones.index') }}">Habitaciones</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('reservaciones.index') }}">Mis Reservas</a>
+                        </li>
                     @endif
                 @endauth
             </ul>
 
-            <form method="POST" action="{{ route('logout') }}">
-                @csrf
-                <button class="btn btn-outline-light btn-sm">Salir</button>
-            </form>
+            @auth
+                <form method="POST" action="{{ route('logout') }}" class="d-flex">
+                    @csrf
+                    <button class="btn btn-outline-light btn-sm">Salir</button>
+                </form>
+            @endauth
         </div>
     </div>
 </nav>

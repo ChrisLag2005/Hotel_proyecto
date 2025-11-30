@@ -44,7 +44,7 @@ class HabitacionServicioController extends Controller
 
         $habitacion->servicios()->sync($serviciosData);
 
-        return redirect()->route('habitaciones.servicios.index')
+        return redirect()->route('habitaciones-servicios.index')
                          ->with('success', 'Servicios actualizados correctamente');
     }
 }
