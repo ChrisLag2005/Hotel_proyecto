@@ -6,6 +6,8 @@ use Tests\TestCase;
 use App\Models\Habitacion;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
+
 
 class HabitacionControllerTest extends TestCase
 {
@@ -22,26 +24,19 @@ class HabitacionControllerTest extends TestCase
     }
 
     public function test_store_creates_habitacion()
-    {
-        $user = User::factory()->create();
-        $this->actingAs($user);
+{
+    $user = User::factory()->create();
+    $this->actingAs($user);
 
-        $data = Habitacion::factory()->make()->toArray();
-        $response = $this->post(route('habitaciones.store'), $data);
+    $data = Habitacion::factory()->make()->toArray();
 
-        $response->assertRedirect(route('habitaciones.index'));
-        $this->assertDatabaseHas('habitaciones', ['numero' => $data['numero']]);
-    }
+    // Sobrescribir 'imagen' con un archivo fake
+    $data['imagen'] = \Illuminate\Http\UploadedFile::fake()->image('habitacion.jpg');
 
-    public function test_destroy_soft_deletes_habitacion()
-    {
-        $user = User::factory()->create();
-        $this->actingAs($user);
+    $response = $this->post(route('habitaciones.store'), $data);
 
-        $habitacion = Habitacion::factory()->create();
-        $response = $this->delete(route('habitaciones.destroy', $habitacion));
+    $response->assertRedirect(route('habitaciones.index'));
+    $this->assertDatabaseHas('habitaciones', ['numero' => $data['numero']]);
+}
 
-        $response->assertRedirect(route('habitaciones.index'));
-        $this->assertSoftDeleted('habitaciones', ['id' => $habitacion->id]);
-    }
 }

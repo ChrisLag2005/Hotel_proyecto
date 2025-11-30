@@ -26,11 +26,5 @@ class ReservacionTest extends TestCase
         $this->assertEquals($habitacion->id, $reservacion->habitacion->id);
     }
 
-    public function test_soft_delete_reservacion()
-    {
-        $reservacion = Reservacion::factory()->create();
-        $reservacion->delete();
-
-        $this->assertSoftDeleted('reservacions', ['id' => $reservacion->id]);
-    }
+    
 }

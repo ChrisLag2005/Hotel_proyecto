@@ -58,6 +58,6 @@ class ReservacionControllerTest extends TestCase
         $response = $this->delete(route('reservaciones.destroy', $reservacion));
 
         $response->assertRedirect(route('reservaciones.index'));
-        $this->assertDatabaseMissing('reservaciones', ['id' => $reservacion->id]);
+        $this->assertSoftDeleted('reservaciones', ['id' => $reservacion->id]);
     }
 }

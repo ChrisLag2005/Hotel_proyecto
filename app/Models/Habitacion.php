@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 
 class Habitacion extends Model
 {
@@ -31,5 +33,4 @@ class Habitacion extends Model
         return $this->hasMany(Reservacion::class);
     }
 
-      protected $dates = ['deleted_at'];
 }

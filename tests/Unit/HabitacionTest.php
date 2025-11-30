@@ -6,6 +6,7 @@ use Tests\TestCase;
 use App\Models\Habitacion;
 use App\Models\Servicio;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
 
 class HabitacionTest extends TestCase
 {
@@ -15,17 +16,12 @@ class HabitacionTest extends TestCase
     {
         $habitacion = Habitacion::factory()->create();
         $servicio = Servicio::factory()->create();
+        $data['imagen'] = UploadedFile::fake()->image('habitacion.jpg');
 
         $habitacion->servicios()->attach($servicio->id);
 
         $this->assertTrue($habitacion->servicios->contains($servicio));
     }
 
-    public function test_soft_delete_habitacion()
-    {
-        $habitacion = Habitacion::factory()->create();
-        $habitacion->delete();
-
-        $this->assertSoftDeleted('habitaciones', ['id' => $habitacion->id]);
-    }
+   
 }

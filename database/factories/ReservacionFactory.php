@@ -17,7 +17,7 @@ class ReservacionFactory extends Factory
         $fechaFin = $this->faker->dateTimeBetween($fechaInicio, '+45 days');
         
         return [
-            'cliente_id' => \App\Models\Cliente::factory(),
+            'user_id' => \App\Models\User::factory(),
             'habitacion_id' => Habitacion::factory(),
             'fecha_inicio' => $fechaInicio,
             'fecha_fin' => $fechaFin,

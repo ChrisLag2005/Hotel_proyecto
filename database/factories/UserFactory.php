@@ -4,15 +4,14 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
-use App\Models\Cliente;
+use App\Models\User;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Usuario>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
  */
 class UserFactory extends Factory
 {
-    protected $model = Cliente::class;
+    protected $model = User::class;
     protected static ?string $password;
 
     /**
@@ -21,17 +20,16 @@ class UserFactory extends Factory
      * @return array<string, mixed>
      */
     public function definition(): array
-    {
-       return [
-    'nombre' => fake()->firstName(),
-    'apellido' => fake()->lastName(),
-    'email' => fake()->unique()->safeEmail(),
-    'password' => static::$password ??= Hash::make('password'),
-    'telefono' => fake()->phoneNumber(),
-    'direccion' => fake()->address(),
-    'tipo' => 'cliente',
-];
-    }
+
+{
+   return [
+       'name' => fake()->name(),   // en vez de 'nombre' + 'apellido'
+       'email' => fake()->unique()->safeEmail(),
+       'password' => Hash::make('password'),
+       'email_verified_at' => now(),
+   ];
+}
+
 
     /**
      * Indicate that the model's email address should be unverified.

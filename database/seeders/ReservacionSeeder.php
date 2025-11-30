@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Cliente;
 use App\Models\Habitacion;
+use App\Models\User;   
 use App\Models\Reservacion;
 use Illuminate\Database\Seeder;
 
